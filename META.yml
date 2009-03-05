@@ -1,0 +1,32 @@
+---
+name: Sys-Info-Driver-Linux
+version: 0.69_01
+author:
+  - 'Burak Gursoy <burak@cpan.org>'
+abstract: Linux driver for Sys::Info
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
+requires:
+  IO::File: 0
+  Linux::Distribution: 0
+  Sys::Info::Base: 0.69_01
+  Test::More: 0.40
+  Unix::Processors: 0
+provides:
+  Sys::Info::Driver::Linux:
+    file: lib/Sys/Info/Driver/Linux.pm
+    version: 0.69_01
+  Sys::Info::Driver::Linux::Device:
+    file: lib/Sys/Info/Driver/Linux/Device.pm
+    version: 0.69_01
+  Sys::Info::Driver::Linux::Device::CPU:
+    file: lib/Sys/Info/Driver/Linux/Device/CPU.pm
+    version: 0.69_01
+  Sys::Info::Driver::Linux::OS:
+    file: lib/Sys/Info/Driver/Linux/OS.pm
+    version: 0.69_01
+generated_by: Module::Build version 0.2808
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2
