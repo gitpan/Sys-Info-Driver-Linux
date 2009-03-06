@@ -27,6 +27,58 @@ my $EDITION   = {
         '8.04' => 'Hardy Heron',
         '8.10' => 'Intrepid Ibex',
     },
+    debian => {
+        '1.1' => 'buzz',
+        '1.2' => 'rex',
+        '1.3' => 'bo',
+        '2.0' => 'hamm',
+        '2.1' => 'slink',
+        '2.2' => 'potato',
+        '3.0' => 'woody',
+        '3.1' => 'sarge',
+        '4.0' => 'etch',
+        '5.0' => 'lenny',
+        '6.0' => 'squeeze',
+    },
+    fedora => {
+         '1' => 'Yarrow',
+         '2' => 'Tettnang',
+         '3' => 'Heidelberg',
+         '4' => 'Stentz',
+         '5' => 'Bordeaux',
+         '6' => 'Zod',
+         '7' => 'Moonshine',
+         '8' => 'Werewolf',
+         '9' => 'Sulphur',
+        '10' => 'Cambridge',
+        '11' => 'Leonidas',
+    },
+    mandriva => {
+           '5.1' => 'Venice',
+           '5.2' => 'Leeloo',
+           '5.3' => 'Festen',
+           '6.0' => 'Venus',
+           '6.1' => 'Helios',
+           '7.0' => 'Air',
+           '7.1' => 'Helium',
+           '7.2' => 'Odyssey',
+           '8.0' => 'Traktopel',
+           '8.1' => 'Vitamin',
+           '8.2' => 'Bluebird',
+           '9.0' => 'Dolphin',
+           '9.1' => 'Bamboo',
+           '9.2' => 'FiveStar',
+          '10.0' => 'Community',
+          '10.1' => 'Community',
+          '10.1' => 'Official',
+          '10.2' => 'Limited Edition 2005',
+        '2006.0' => '2006',
+        '2007'   => '2007',
+        '2007.1' => '2007 Spring',
+        '2008.0' => '2008',
+        '2008.1' => '2008 Spring',
+        '2009.0' => '2009',
+    },
 };
 
 my $MANUFACTURER = {
@@ -168,11 +220,11 @@ sub domain_name {
     foreach my $line ( $self->read_file( proc->{resolv} ) ) {
         chomp $line;
         if ( $line =~ m{\A domain \s+ (.*) \z}xmso ) {
-            $domain = $1;
-            last;
+            return $1;
         }
     }
-    return $domain;
+    my $sys = qx{dnsdomainname 2> /dev/null};
+    return $sys;
 }
 
 sub fs {
