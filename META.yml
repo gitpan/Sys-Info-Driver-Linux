@@ -1,6 +1,6 @@
 ---
 name: Sys-Info-Driver-Linux
-version: 0.69_02
+version: 0.69_05
 author:
   - 'Burak Gursoy <burak@cpan.org>'
 abstract: Linux driver for Sys::Info
@@ -10,13 +10,15 @@ resources:
 requires:
   IO::File: 0
   Linux::Distribution: 0
-  Sys::Info::Base: 0.69_01
-  Test::More: 0.40
+  Sys::Info::Base: 0.69_05
   Unix::Processors: 0
+build_requires:
+  Test::More: 0.40
+  Test::Sys::Info: 0.11
 provides:
   Sys::Info::Driver::Linux:
     file: lib/Sys/Info/Driver/Linux.pm
-    version: 0.69_02
+    version: 0.69_05
   Sys::Info::Driver::Linux::Device:
     file: lib/Sys/Info/Driver/Linux/Device.pm
     version: 0.69_01
