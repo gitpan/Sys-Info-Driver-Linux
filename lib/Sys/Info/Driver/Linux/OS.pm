@@ -8,7 +8,7 @@ use Carp qw( croak );
 use Sys::Info::Driver::Linux;
 use Sys::Info::Constants qw( :linux );
 
-$VERSION = '0.70';
+$VERSION = '0.72';
 
 my %OSVERSION; # cache
 
@@ -427,6 +427,12 @@ Sys::Info::Driver::Linux::OS - Linux backend
 -
 
 =head1 DESCRIPTION
+
+This document describes version C<0.72> of C<Sys::Info::Driver::Linux::OS>
+released on C<3 May 2009>.
+
+This document describes version C<0.72> of C<Sys::Info::Driver::Linux::OS>
+released on C<3 May 2009>.
 
 -
 

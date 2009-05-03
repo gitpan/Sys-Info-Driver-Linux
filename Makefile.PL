@@ -1,19 +1,18 @@
-#!/usr/bin/perl -w
-die "OS unsupported\n" if $^O !~ m{linux}xmsi;
-
+#!/usr/bin/env perl
 use strict;
-use vars qw(%PREREQ %BUILD_REQ);
 use ExtUtils::MakeMaker;
+use lib qw( builder );
+use Build::Spec qw( mm_spec );
 
-do 'PREREQ' or die "Error including PREREQ: $!";
+my %spec = mm_spec;
 
 WriteMakefile(
-   'NAME'         => 'Sys::Info::Driver::Linux',
-   'VERSION_FROM' => 'lib/Sys/Info/Driver/Linux.pm',
-   'PREREQ_PM'    => { %PREREQ, %BUILD_REQ },
-   ($] >= 5.005 ? (
-   AUTHOR   => 'Burak Gursoy <burak@cpan.org>',
-   ABSTRACT => 'Linux driver for Sys::Info',
-   ) : ()),
-   PL_FILES => {},
+    NAME         => $spec{module_name},
+    VERSION_FROM => $spec{VERSION_FROM},
+    PREREQ_PM    => $spec{PREREQ_PM},
+    PL_FILES     => {},
+    ($] >= 5.005 ? (
+    AUTHOR       => $spec{dist_author},
+    ABSTRACT     => $spec{ABSTRACT},
+    ) : ()),
 );

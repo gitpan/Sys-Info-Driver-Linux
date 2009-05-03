@@ -2,13 +2,16 @@ lib/Sys/Info/Driver/Linux.pm
 lib/Sys/Info/Driver/Linux/Device.pm
 lib/Sys/Info/Driver/Linux/OS.pm
 lib/Sys/Info/Driver/Linux/Device/CPU.pm
-t/01-pod.t
-t/02-pod-coverage.t
 t/03-basic.t
-Makefile.PL
 Build.PL
 Changes
 MANIFEST
 README
-PREREQ
+SPEC
+builder/Build.pm
+builder/Build/Spec.pm
+t/201-pod.t
+t/202-pod-coverage.t
+Makefile.PL	Generated automatically
+LICENSE
 META.yml

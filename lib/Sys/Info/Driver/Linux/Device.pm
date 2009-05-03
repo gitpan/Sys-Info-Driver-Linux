@@ -2,7 +2,7 @@ package Sys::Info::Driver::Linux::Device;
 use strict;
 use vars qw( $VERSION );
 
-$VERSION = '0.70';
+$VERSION = '0.72';
 
 1;
 
@@ -17,6 +17,12 @@ Sys::Info::Driver::Linux::Device - Base class for Linux device drivers
     use base qw( Sys::Info::Driver::Linux::Device );
 
 =head1 DESCRIPTION
+
+This document describes version C<0.72> of C<Sys::Info::Driver::Linux::Device>
+released on C<3 May 2009>.
+
+This document describes version C<0.72> of C<Sys::Info::Driver::Linux::Device>
+released on C<3 May 2009>.
 
 Base class for Linux device drivers.
 

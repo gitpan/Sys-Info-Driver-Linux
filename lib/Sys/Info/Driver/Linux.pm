@@ -3,7 +3,7 @@ use strict;
 use vars qw( $VERSION @ISA @EXPORT );
 use Exporter ();
 
-$VERSION = '0.70';
+$VERSION = '0.72';
 @ISA     = qw( Exporter );
 @EXPORT  = qw( proc );
 
@@ -33,6 +33,12 @@ Sys::Info::Driver::Linux - Linux driver for Sys::Info
     use Sys::Info::Driver::Linux;
 
 =head1 DESCRIPTION
+
+This document describes version C<0.72> of C<Sys::Info::Driver::Linux>
+released on C<3 May 2009>.
+
+This document describes version C<0.72> of C<Sys::Info::Driver::Linux>
+released on C<3 May 2009>.
 
 This is the main module in the C<Linux> driver collection.
 
