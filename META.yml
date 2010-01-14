@@ -1,39 +1,43 @@
 ---
-name: Sys-Info-Driver-Linux
-version: 0.72
+abstract: 'Linux driver for Sys::Info'
 author:
   - 'Burak Gursoy <burak@cpan.org>'
-abstract: Linux driver for Sys::Info
-license: perl
-resources:
-  license: http://dev.perl.org/licenses/
-  repository: http://bitbucket.org/burak/cpan-sys-info-driver-linux/
-requires:
-  Linux::Distribution: 0
-  Sys::Info::Base: 0.72
-  Unix::Processors: 0
 build_requires:
   Test::More: 0.40
-  Test::Sys::Info: 0.15
-provides:
-  Sys::Info::Driver::Linux:
-    file: lib/Sys/Info/Driver/Linux.pm
-    version: 0.72
-  Sys::Info::Driver::Linux::Device:
-    file: lib/Sys/Info/Driver/Linux/Device.pm
-    version: 0.72
-  Sys::Info::Driver::Linux::Device::CPU:
-    file: lib/Sys/Info/Driver/Linux/Device/CPU.pm
-    version: 0.72
-  Sys::Info::Driver::Linux::OS:
-    file: lib/Sys/Info/Driver/Linux/OS.pm
-    version: 0.72
+  Test::Sys::Info: 0.20
+configure_requires:
+  Module::Build: 0.36
+generated_by: 'Module::Build version 0.3601'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Sys-Info-Driver-Linux
 no_index:
   directory:
     - monolithic_version
     - builder
     - t
-generated_by: Module::Build version 0.32
-meta-spec:
-  url: http://module-build.sourceforge.net/META-spec-v1.2.html
-  version: 1.2
+provides:
+  Sys::Info::Driver::Linux:
+    file: lib/Sys/Info/Driver/Linux.pm
+    version: 0.73
+  Sys::Info::Driver::Linux::Device:
+    file: lib/Sys/Info/Driver/Linux/Device.pm
+    version: 0.73
+  Sys::Info::Driver::Linux::Device::CPU:
+    file: lib/Sys/Info/Driver/Linux/Device/CPU.pm
+    version: 0.73
+  Sys::Info::Driver::Linux::OS:
+    file: lib/Sys/Info/Driver/Linux/OS.pm
+    version: 0.73
+  Sys::Info::Driver::Linux::OS::Distribution:
+    file: lib/Sys/Info/Driver/Linux/OS/Distribution.pm
+    version: 0.73
+requires:
+  Sys::Info::Base: 0.73
+  Unix::Processors: 0
+resources:
+  license: http://dev.perl.org/licenses/
+  repository: http://bitbucket.org/burak/cpan-sys-info-driver-linux/
+version: 0.73

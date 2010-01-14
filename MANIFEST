@@ -1,13 +1,15 @@
 lib/Sys/Info/Driver/Linux.pm
 lib/Sys/Info/Driver/Linux/Device.pm
-lib/Sys/Info/Driver/Linux/OS.pm
 lib/Sys/Info/Driver/Linux/Device/CPU.pm
+lib/Sys/Info/Driver/Linux/OS.pm
+lib/Sys/Info/Driver/Linux/OS/Distribution.pm
 t/03-basic.t
 Build.PL
 Changes
 MANIFEST
 README
 SPEC
+.perlcriticrc
 builder/Build.pm
 builder/Build/Spec.pm
 t/201-pod.t

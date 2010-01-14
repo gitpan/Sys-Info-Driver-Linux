@@ -1,13 +1,13 @@
 package Sys::Info::Driver::Linux;
 use strict;
+use warnings;
 use vars qw( $VERSION @ISA @EXPORT );
-use Exporter ();
+use base qw( Exporter );
 
-$VERSION = '0.72';
-@ISA     = qw( Exporter );
+$VERSION = '0.73';
 @EXPORT  = qw( proc );
 
-use constant proc => {
+use constant proc => { ## no critic (NamingConventions::Capitalization)
     loadavg  => '/proc/loadavg', # average cpu load
     cpuinfo  => '/proc/cpuinfo', # cpu information
     uptime   => '/proc/uptime',  # uptime file
@@ -34,11 +34,8 @@ Sys::Info::Driver::Linux - Linux driver for Sys::Info
 
 =head1 DESCRIPTION
 
-This document describes version C<0.72> of C<Sys::Info::Driver::Linux>
-released on C<3 May 2009>.
-
-This document describes version C<0.72> of C<Sys::Info::Driver::Linux>
-released on C<3 May 2009>.
+This document describes version C<0.73> of C<Sys::Info::Driver::Linux>
+released on C<14 January 2010>.
 
 This is the main module in the C<Linux> driver collection.
 
@@ -54,11 +51,11 @@ Automatically exported. Includes paths to several files.
 
 =head1 AUTHOR
 
-Burak Gürsoy, E<lt>burakE<64>cpan.orgE<gt>
+Burak Gursoy <burak@cpan.org>.
 
 =head1 COPYRIGHT
 
-Copyright 2006-2009 Burak Gürsoy. All rights reserved.
+Copyright 2006 - 2010 Burak Gursoy. All rights reserved.
 
 =head1 LICENSE
 

@@ -1,8 +1,9 @@
 package Sys::Info::Driver::Linux::Device;
 use strict;
+use warnings;
 use vars qw( $VERSION );
 
-$VERSION = '0.72';
+$VERSION = '0.73';
 
 1;
 
@@ -18,11 +19,8 @@ Sys::Info::Driver::Linux::Device - Base class for Linux device drivers
 
 =head1 DESCRIPTION
 
-This document describes version C<0.72> of C<Sys::Info::Driver::Linux::Device>
-released on C<3 May 2009>.
-
-This document describes version C<0.72> of C<Sys::Info::Driver::Linux::Device>
-released on C<3 May 2009>.
+This document describes version C<0.73> of C<Sys::Info::Driver::Linux::Device>
+released on C<14 January 2010>.
 
 Base class for Linux device drivers.
 
@@ -32,11 +30,11 @@ None.
 
 =head1 AUTHOR
 
-Burak Gürsoy, E<lt>burakE<64>cpan.orgE<gt>
+Burak Gursoy <burak@cpan.org>.
 
 =head1 COPYRIGHT
 
-Copyright 2006-2009 Burak Gürsoy. All rights reserved.
+Copyright 2006 - 2010 Burak Gursoy. All rights reserved.
 
 =head1 LICENSE
 

@@ -1,19 +1,20 @@
 package Sys::Info::Driver::Linux::Device::CPU;
 use strict;
+use warnings;
 use vars qw($VERSION);
 use base qw(Sys::Info::Base);
 use Sys::Info::Driver::Linux;
 use Unix::Processors;
 use POSIX ();
-use Sys::Info::Constants qw( LIN_MACHINE );
+use Carp qw( croak );
 
-$VERSION = '0.72';
+$VERSION = '0.73';
 
 sub identify {
     my $self = shift;
 
     if ( ! $self->{META_DATA} ) {
-        my $mach = (POSIX::uname)[LIN_MACHINE];
+        my $mach = $self->uname->{machine};
         my $arch = $mach =~ m{ i [0-9] 86 }xmsi ? 'x86'
                  : $mach =~ m{ ia64       }xmsi ? 'IA64'
                  : $mach =~ m{ x86_64     }xmsi ? 'AMD-64'
@@ -38,39 +39,37 @@ sub bitness {
     my $flags = $cpu[0]->{flags};
     if ( $flags ) {
         my $lm = grep { $_ eq 'lm' } @{$flags};
-        return 64 if $lm;
+        return '64' if $lm;
     }
-    my $arch = $cpu[0]->{architecture};
-    return 64 if $arch =~ m{64}xms;
-    return 32;
+    return $cpu[0]->{architecture} =~ m{64}xms ? '64' : '32';
 }
 
 sub load {
     my $self  = shift;
     my $level = shift;
-    my @loads = split /\s+/, $self->slurp( proc->{loadavg} );
+    my @loads = split /\s+/xms, $self->slurp( proc->{loadavg} );
     return $loads[$level];
 }
 
 sub _parse_cpuinfo {
     my $self = shift;
-    my $raw  = shift || die "Parser called without data";
+    my $raw  = shift || croak 'Parser called without data';
     my($k, $v);
     my %cpu;
-    foreach my $line (split /\n/, $raw) {
-        ($k, $v) = split /\s+:\s+/, $line;
+    foreach my $line (split /\n/xms, $raw) {
+        ($k, $v) = split /\s+:\s+/xms, $line;
         $cpu{$k} = $v;
     }
 
-    my @flags = split /\s+/, $cpu{flags};
+    my @flags = split /\s+/xms, $cpu{flags};
     my %flags = map { $_ => 1 } @flags;
     my $up    = Unix::Processors->new;
     (my $name  = $cpu{'model name'}) =~ s[ \s{2,} ][ ]xms;
 
     return(
         processor_id                 => $cpu{processor},
-        data_width                   => $flags{lm} ? 64 : 32, # guess
-        address_width                => $flags{lm} ? 64 : 32, # guess
+        data_width                   => $flags{lm} ? '64' : '32', # guess
+        address_width                => $flags{lm} ? '64' : '32', # guess
         bus_speed                    => undef,
         speed                        => $cpu{'cpu MHz'},
         name                         => $name,
@@ -99,11 +98,8 @@ Sys::Info::Driver::Linux::Device::CPU - Linux CPU Device Driver
 
 =head1 DESCRIPTION
 
-This document describes version C<0.72> of C<Sys::Info::Driver::Linux::Device::CPU>
-released on C<3 May 2009>.
-
-This document describes version C<0.72> of C<Sys::Info::Driver::Linux::Device::CPU>
-released on C<3 May 2009>.
+This document describes version C<0.73> of C<Sys::Info::Driver::Linux::Device::CPU>
+released on C<14 January 2010>.
 
 Identifies the CPU with L<Unix::Processors>, L<POSIX> and C<< /proc >>.
 
@@ -130,11 +126,11 @@ proc filesystem.
 
 =head1 AUTHOR
 
-Burak Gürsoy, E<lt>burakE<64>cpan.orgE<gt>
+Burak Gursoy <burak@cpan.org>.
 
 =head1 COPYRIGHT
 
-Copyright 2006-2009 Burak Gürsoy. All rights reserved.
+Copyright 2006 - 2010 Burak Gursoy. All rights reserved.
 
 =head1 LICENSE
 
