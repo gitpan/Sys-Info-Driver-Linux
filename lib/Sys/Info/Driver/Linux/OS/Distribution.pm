@@ -7,7 +7,7 @@ use Carp qw( croak );
 use Sys::Info::Driver::Linux;
 use Sys::Info::Constants qw( :linux );
 
-our $VERSION = '0.73';
+our $VERSION = '0.74';
 
 my %ORIGINAL_RELEASE = qw(
     arch-release            arch
@@ -209,7 +209,9 @@ sub _probe_name {
 sub _probe_release {
     my($self, $r) = @_;
     foreach my $id ( keys %{ $r } ) {
-        if ( -f "/etc/$id" && !-l _ ){
+	# we can't use "-l _" here. it'll die on some systems
+	# XXX: check if -l check is really necessary
+        if ( -f "/etc/$id" && !-l "/etc/$id" ){
             $self->{'DISTRIB_ID'}   = $r->{$id};
             $self->{'release_file'} = $id;
             return $self->{'DISTRIB_ID'};
@@ -376,8 +378,8 @@ Sys::Info::Driver::Linux::OS::Distribution - Linux distribution probe
 
 =head1 DESCRIPTION
 
-This document describes version C<0.73> of C<Sys::Info::Driver::Linux::OS::Distribution>
-released on C<14 January 2010>.
+This document describes version C<0.74> of C<Sys::Info::Driver::Linux::OS::Distribution>
+released on C<15 January 2010>.
 
 This is a simple module that tries to guess on what linux distribution
 we are running by looking for release's files in /etc.  It now looks for

@@ -8,7 +8,7 @@ use Unix::Processors;
 use POSIX ();
 use Carp qw( croak );
 
-$VERSION = '0.73';
+$VERSION = '0.74';
 
 sub identify {
     my $self = shift;
@@ -61,10 +61,11 @@ sub _parse_cpuinfo {
         $cpu{$k} = $v;
     }
 
-    my @flags = split /\s+/xms, $cpu{flags};
+    my @flags = $cpu{flags} ? (split /\s+/xms, $cpu{flags}) : ();
     my %flags = map { $_ => 1 } @flags;
     my $up    = Unix::Processors->new;
-    (my $name  = $cpu{'model name'}) =~ s[ \s{2,} ][ ]xms;
+    my $name  = $cpu{'model name'};
+    $name     =~ s[ \s{2,} ][ ]xms if $name;
 
     return(
         processor_id                 => $cpu{processor},
@@ -72,7 +73,7 @@ sub _parse_cpuinfo {
         address_width                => $flags{lm} ? '64' : '32', # guess
         bus_speed                    => undef,
         speed                        => $cpu{'cpu MHz'},
-        name                         => $name,
+        name                         => $name || q{},
         family                       => $cpu{'cpu family'},
         manufacturer                 => $cpu{vendor_id},
         model                        => $cpu{model},
@@ -98,8 +99,8 @@ Sys::Info::Driver::Linux::Device::CPU - Linux CPU Device Driver
 
 =head1 DESCRIPTION
 
-This document describes version C<0.73> of C<Sys::Info::Driver::Linux::Device::CPU>
-released on C<14 January 2010>.
+This document describes version C<0.74> of C<Sys::Info::Driver::Linux::Device::CPU>
+released on C<15 January 2010>.
 
 Identifies the CPU with L<Unix::Processors>, L<POSIX> and C<< /proc >>.
 
