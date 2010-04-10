@@ -7,7 +7,7 @@ build_requires:
   Test::Sys::Info: 0.20
 configure_requires:
   Module::Build: 0.36
-generated_by: 'Module::Build version 0.3601'
+generated_by: 'Module::Build version 0.3607'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -21,23 +21,27 @@ no_index:
 provides:
   Sys::Info::Driver::Linux:
     file: lib/Sys/Info/Driver/Linux.pm
-    version: 0.74
+    version: 0.75_01
   Sys::Info::Driver::Linux::Device:
     file: lib/Sys/Info/Driver/Linux/Device.pm
-    version: 0.74
+    version: 0.75_01
   Sys::Info::Driver::Linux::Device::CPU:
     file: lib/Sys/Info/Driver/Linux/Device/CPU.pm
-    version: 0.74
+    version: 0.75_01
   Sys::Info::Driver::Linux::OS:
     file: lib/Sys/Info/Driver/Linux/OS.pm
-    version: 0.74
+    version: 0.75_01
   Sys::Info::Driver::Linux::OS::Distribution:
     file: lib/Sys/Info/Driver/Linux/OS/Distribution.pm
-    version: 0.74
+    version: 0.75_01
+  Sys::Info::Driver::Linux::OS::Distribution::Conf:
+    file: lib/Sys/Info/Driver/Linux/OS/Distribution/Conf.pm
+    version: 0.75_01
 requires:
+  Config::General: 0
   Sys::Info::Base: 0.73
   Unix::Processors: 0
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://bitbucket.org/burak/cpan-sys-info-driver-linux/
-version: 0.74
+version: 0.75_01

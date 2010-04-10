@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use vars qw( $VERSION );
 
-$VERSION = '0.74';
+$VERSION = '0.75_01';
 
 1;
 
@@ -19,8 +19,12 @@ Sys::Info::Driver::Linux::Device - Base class for Linux device drivers
 
 =head1 DESCRIPTION
 
-This document describes version C<0.74> of C<Sys::Info::Driver::Linux::Device>
-released on C<15 January 2010>.
+This document describes version C<0.75_01> of C<Sys::Info::Driver::Linux::Device>
+released on C<10 April 2010>.
+
+B<WARNING>: This version of the module is part of a
+developer (beta) release of the distribution and it is
+not suitable for production use.
 
 Base class for Linux device drivers.
 

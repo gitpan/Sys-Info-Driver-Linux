@@ -12,7 +12,7 @@ use constant FSTAB_LENGTH => 6;
 
 ##no critic (InputOutput::ProhibitBacktickOperators)
 
-$VERSION = '0.74';
+$VERSION = '0.75_01';
 
 my %OSVERSION; # cache
 
@@ -288,8 +288,12 @@ Sys::Info::Driver::Linux::OS - Linux backend
 
 =head1 DESCRIPTION
 
-This document describes version C<0.74> of C<Sys::Info::Driver::Linux::OS>
-released on C<15 January 2010>.
+This document describes version C<0.75_01> of C<Sys::Info::Driver::Linux::OS>
+released on C<10 April 2010>.
+
+B<WARNING>: This version of the module is part of a
+developer (beta) release of the distribution and it is
+not suitable for production use.
 
 -
 
