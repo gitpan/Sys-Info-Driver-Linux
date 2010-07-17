@@ -5,7 +5,7 @@ use vars qw( $VERSION @EXPORT %CONF );
 use base qw( Exporter );
 use Config::General ();
 
-$VERSION = '0.75_01';
+$VERSION = '0.76';
 @EXPORT  = qw( %CONF );
 
 %CONF = Config::General::ParseConfig( -String => <<'RAW' );
@@ -226,12 +226,8 @@ Sys::Info::Driver::Linux::OS::Distribution::Conf - Distro configuration
 
 =head1 DESCRIPTION
 
-This document describes version C<0.75_01> of C<Sys::Info::Driver::Linux::OS::Distribution::Conf>
-released on C<10 April 2010>.
-
-B<WARNING>: This version of the module is part of a
-developer (beta) release of the distribution and it is
-not suitable for production use.
+This document describes version C<0.76> of C<Sys::Info::Driver::Linux::OS::Distribution::Conf>
+released on C<18 July 2010>.
 
 =head1 AUTHOR
 
@@ -244,7 +240,7 @@ Copyright 2006 - 2010 Burak Gursoy. All rights reserved.
 =head1 LICENSE
 
 This library is free software; you can redistribute it and/or modify 
-it under the same terms as Perl itself, either Perl version 5.10.0 or, 
+it under the same terms as Perl itself, either Perl version 5.10.1 or, 
 at your option, any later version of Perl 5 you may have available.
 
 =cut
