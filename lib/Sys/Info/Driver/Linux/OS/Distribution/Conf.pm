@@ -5,7 +5,7 @@ use vars qw( $VERSION @EXPORT %CONF );
 use base qw( Exporter );
 use Config::General ();
 
-$VERSION = '0.76';
+$VERSION = '0.77';
 @EXPORT  = qw( %CONF );
 
 %CONF = Config::General::ParseConfig( -String => <<'RAW' );
@@ -64,7 +64,7 @@ $VERSION = '0.76';
 
 <fedora>
     manufacturer  = Fedora Project
-    version_match = Fedora Core release (\d+) \(
+    version_match = Fedora (?:Core )?release (\d+) \(
     release_derived = fedora-release
     <edition>
            1    = Yarrow
@@ -226,8 +226,8 @@ Sys::Info::Driver::Linux::OS::Distribution::Conf - Distro configuration
 
 =head1 DESCRIPTION
 
-This document describes version C<0.76> of C<Sys::Info::Driver::Linux::OS::Distribution::Conf>
-released on C<18 July 2010>.
+This document describes version C<0.77> of C<Sys::Info::Driver::Linux::OS::Distribution::Conf>
+released on C<5 August 2010>.
 
 =head1 AUTHOR
 

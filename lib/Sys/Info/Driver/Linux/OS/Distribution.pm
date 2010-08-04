@@ -9,7 +9,7 @@ use Sys::Info::Constants qw( :linux );
 use Sys::Info::Driver::Linux::OS::Distribution::Conf;
 use File::Spec;
 
-our $VERSION = '0.76';
+our $VERSION = '0.77';
 
 # XXX: <REMOVE>
 my $RELX = sub {
@@ -253,8 +253,8 @@ Sys::Info::Driver::Linux::OS::Distribution - Linux distribution probe
 
 =head1 DESCRIPTION
 
-This document describes version C<0.76> of C<Sys::Info::Driver::Linux::OS::Distribution>
-released on C<18 July 2010>.
+This document describes version C<0.77> of C<Sys::Info::Driver::Linux::OS::Distribution>
+released on C<5 August 2010>.
 
 This is a simple module that tries to guess on what linux distribution
 we are running by looking for release's files in /etc.  It now looks for

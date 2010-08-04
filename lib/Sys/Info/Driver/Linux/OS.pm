@@ -12,7 +12,7 @@ use constant FSTAB_LENGTH => 6;
 
 ##no critic (InputOutput::ProhibitBacktickOperators)
 
-$VERSION = '0.76';
+$VERSION = '0.77';
 
 sub init {
     my $self = shift;
@@ -286,8 +286,8 @@ Sys::Info::Driver::Linux::OS - Linux backend
 
 =head1 DESCRIPTION
 
-This document describes version C<0.76> of C<Sys::Info::Driver::Linux::OS>
-released on C<18 July 2010>.
+This document describes version C<0.77> of C<Sys::Info::Driver::Linux::OS>
+released on C<5 August 2010>.
 
 -
 

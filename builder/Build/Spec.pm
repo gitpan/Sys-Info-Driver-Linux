@@ -11,7 +11,7 @@ use base qw( Exporter );
 ## no critic (RequireUseWarnings)
 
 BEGIN {
-   $VERSION   = '0.63';
+   $VERSION   = '0.64';
    @EXPORT    = qw( spec );
    @EXPORT_OK = qw( mm_spec );
 }
@@ -56,7 +56,8 @@ sub mm_spec {
     $spec{VERSION_FROM} = "lib/$file.pm";
     $spec{PREREQ_PM}    = { %{ $spec{requires} }, %{ $spec{build_requires} } };
     _mm_recommend( %spec );
-    $spec{ABSTRACT} = _mm_abstract( $spec{VERSION_FROM} );
+    $spec{ABSTRACT}  = _mm_abstract( $spec{VERSION_FROM} );
+    $spec{EXE_FILES} = $spec{script_files} ? $spec{script_files} : [];
     return %spec;
 }
 

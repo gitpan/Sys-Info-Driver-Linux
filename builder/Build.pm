@@ -6,7 +6,7 @@ use constant TAINT_SHEBANG => "#!perl -Tw\nuse constant TAINTMODE => 1;\n";
 # since this is a builder we don't care about warnings.pm to support older perl
 ## no critic (RequireUseWarnings, InputOutput::RequireBriefOpen, InputOutput::ProhibitBacktickOperators)
 
-$VERSION = '0.63';
+$VERSION = '0.70';
 
 use File::Find;
 use File::Spec;
@@ -44,6 +44,7 @@ __PACKAGE__->add_property( monolith_add_to_top => [] );
 __PACKAGE__->add_property( taint_mode_tests    => 0  );
 __PACKAGE__->add_property( add_pod_author_copyright_license => 0 );
 __PACKAGE__->add_property( copyright_first_year => 0 );
+__PACKAGE__->add_property( initialization_hook  => q() );
 
 sub new {
    my $class = shift;
@@ -61,6 +62,11 @@ sub new {
 sub create_build_script {
    my $self = shift;
    $self->_add_vanilla_makefile_pl if $self->vanilla_makefile_pl;
+   my $hook = $self->initialization_hook;
+   if ( $hook ) {
+      my $eok = eval $hook;
+      croak "Error compiling initialization_hook: $@" if $@;
+   }
    return $self->SUPER::create_build_script( @_ );
 }
 
@@ -404,7 +410,21 @@ sub _add_vanilla_makefile_pl {
 }
 
 sub _vanilla_makefile_pl {
-   return <<'VANILLA_MAKEFILE_PL';
+   my $self = shift;
+   my $hook = $self->initialization_hook;
+   my $extra = ! $hook ? q() : <<'HOOK';
+
+my $eok = eval <<'THIS_IS_SOME_IDENTIFIER';
+<%HOOK%>
+THIS_IS_SOME_IDENTIFIER
+
+die "Error compiling initialization_hook: $@\n" if $@;
+
+HOOK
+
+   $extra =~ s{<%HOOK%>}{$hook}xmsg if $extra;
+
+   my $code = <<'VANILLA_MAKEFILE_PL';
 #!/usr/bin/env perl
 use strict;
 use ExtUtils::MakeMaker;
@@ -412,6 +432,8 @@ use lib qw( builder );
 use Build::Spec qw( mm_spec );
 
 my %spec = mm_spec;
+
+<%EXTRA%>
 
 WriteMakefile(
     NAME         => $spec{module_name},
@@ -421,9 +443,12 @@ WriteMakefile(
     ($] >= 5.005 ? (
     AUTHOR       => $spec{dist_author},
     ABSTRACT     => $spec{ABSTRACT},
+    EXE_FILES    => $spec{EXE_FILES},
     ) : ()),
 );
 VANILLA_MAKEFILE_PL
+   $code =~ s{<%EXTRA%>}{$extra}xmsg;
+   return $code;
 }
 
 sub _pod_author_copyright_license {
