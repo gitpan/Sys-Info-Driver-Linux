@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use vars qw( $VERSION );
 
-$VERSION = '0.77';
+$VERSION = '0.78';
 
 1;
 
@@ -19,8 +19,8 @@ Sys::Info::Driver::Linux::Device - Base class for Linux device drivers
 
 =head1 DESCRIPTION
 
-This document describes version C<0.77> of C<Sys::Info::Driver::Linux::Device>
-released on C<5 August 2010>.
+This document describes version C<0.78> of C<Sys::Info::Driver::Linux::Device>
+released on C<17 April 2011>.
 
 Base class for Linux device drivers.
 
@@ -34,7 +34,7 @@ Burak Gursoy <burak@cpan.org>.
 
 =head1 COPYRIGHT
 
-Copyright 2006 - 2010 Burak Gursoy. All rights reserved.
+Copyright 2006 - 2011 Burak Gursoy. All rights reserved.
 
 =head1 LICENSE
 
