@@ -4,7 +4,7 @@ use warnings;
 use vars qw( $VERSION @ISA @EXPORT );
 use base qw( Exporter );
 
-$VERSION = '0.78';
+$VERSION = '0.7801';
 @EXPORT  = qw( proc );
 
 use constant proc => { ## no critic (NamingConventions::Capitalization)
@@ -34,8 +34,8 @@ Sys::Info::Driver::Linux - Linux driver for Sys::Info
 
 =head1 DESCRIPTION
 
-This document describes version C<0.78> of C<Sys::Info::Driver::Linux>
-released on C<17 April 2011>.
+This document describes version C<0.7801> of C<Sys::Info::Driver::Linux>
+released on C<31 July 2011>.
 
 This is the main module in the C<Linux> driver collection.
 

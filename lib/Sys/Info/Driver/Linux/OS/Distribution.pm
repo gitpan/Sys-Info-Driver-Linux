@@ -5,11 +5,11 @@ use constant STD_RELEASE => 'lsb-release';
 use base qw( Sys::Info::Base );
 use Carp qw( croak );
 use Sys::Info::Driver::Linux;
-use Sys::Info::Constants qw( :linux );
+use Sys::Info::Driver::Linux::Constants qw( :all );
 use Sys::Info::Driver::Linux::OS::Distribution::Conf;
 use File::Spec;
 
-our $VERSION = '0.78';
+our $VERSION = '0.7801';
 
 # XXX: <REMOVE>
 my $RELX = sub {
@@ -161,10 +161,7 @@ sub _initial_probe {
     #$build_date = "1 SMP Mon Aug 16 09:25:06 EDT 2004";
     $build_date = q{} if not $build_date; # running since blah thingie
 
-    # format: 'Linux version 1.2.3 (foo@bar.com)'
-    # format: 'Linux version 1.2.3 (foo@bar.com) (gcc 1.2.3)'
-    # format: 'Linux version 1.2.3 (foo@bar.com) (gcc 1.2.3 (Redhat blah blah))'
-    if ( $str =~ LIN_RE_LINUX_VERSION ) {
+    if ( $str =~ RE_LINUX_VERSION || $str =~ RE_LINUX_VERSION2 ) {
         $kernel = $1;
         if ( $distro = $self->trim( $2 ) ) {
             if ( $distro =~ m{ \s\((.+?)\)\) \z }xms ) {
@@ -253,8 +250,8 @@ Sys::Info::Driver::Linux::OS::Distribution - Linux distribution probe
 
 =head1 DESCRIPTION
 
-This document describes version C<0.78> of C<Sys::Info::Driver::Linux::OS::Distribution>
-released on C<17 April 2011>.
+This document describes version C<0.7801> of C<Sys::Info::Driver::Linux::OS::Distribution>
+released on C<31 July 2011>.
 
 This is a simple module that tries to guess on what linux distribution
 we are running by looking for release's files in /etc.  It now looks for

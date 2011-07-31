@@ -5,7 +5,7 @@ use vars qw( $VERSION @EXPORT %CONF );
 use base qw( Exporter );
 use Config::General ();
 
-$VERSION = '0.78';
+$VERSION = '0.7801';
 @EXPORT  = qw( %CONF );
 
 %CONF = Config::General::ParseConfig( -String => <<'RAW' );
@@ -226,8 +226,8 @@ Sys::Info::Driver::Linux::OS::Distribution::Conf - Distro configuration
 
 =head1 DESCRIPTION
 
-This document describes version C<0.78> of C<Sys::Info::Driver::Linux::OS::Distribution::Conf>
-released on C<17 April 2011>.
+This document describes version C<0.7801> of C<Sys::Info::Driver::Linux::OS::Distribution::Conf>
+released on C<31 July 2011>.
 
 =head1 AUTHOR
 

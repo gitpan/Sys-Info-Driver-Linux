@@ -22,27 +22,30 @@ no_index:
 provides:
   Sys::Info::Driver::Linux:
     file: lib/Sys/Info/Driver/Linux.pm
-    version: 0.78
+    version: 0.7801
+  Sys::Info::Driver::Linux::Constants:
+    file: lib/Sys/Info/Driver/Linux/Constants.pm
+    version: 0.7801
   Sys::Info::Driver::Linux::Device:
     file: lib/Sys/Info/Driver/Linux/Device.pm
-    version: 0.78
+    version: 0.7801
   Sys::Info::Driver::Linux::Device::CPU:
     file: lib/Sys/Info/Driver/Linux/Device/CPU.pm
-    version: 0.78
+    version: 0.7801
   Sys::Info::Driver::Linux::OS:
     file: lib/Sys/Info/Driver/Linux/OS.pm
-    version: 0.78
+    version: 0.7801
   Sys::Info::Driver::Linux::OS::Distribution:
     file: lib/Sys/Info/Driver/Linux/OS/Distribution.pm
-    version: 0.78
+    version: 0.7801
   Sys::Info::Driver::Linux::OS::Distribution::Conf:
     file: lib/Sys/Info/Driver/Linux/OS/Distribution/Conf.pm
-    version: 0.78
+    version: 0.7801
 requires:
   Config::General: 0
-  Sys::Info::Base: 0.78
+  Sys::Info::Base: 0.7801
   Unix::Processors: 0
 resources:
   license: http://dev.perl.org/licenses/
   repository: http://bitbucket.org/burak/cpan-sys-info-driver-linux/
-version: 0.78
+version: 0.7801
