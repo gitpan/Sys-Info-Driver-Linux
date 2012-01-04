@@ -1,6 +1,6 @@
 package Build::Spec;
 use strict;
-use vars qw( $VERSION @ISA @EXPORT @EXPORT_OK );
+use warnings;
 use Exporter ();
 use Carp qw( croak );
 use constant DEFAULT_AUTHOR => 'Burak Gursoy <burak@cpan.org>';
@@ -11,12 +11,13 @@ use base qw( Exporter );
 ## no critic (RequireUseWarnings)
 
 BEGIN {
-   $VERSION   = '0.64';
-   @EXPORT    = qw( spec );
-   @EXPORT_OK = qw( mm_spec );
+   our $VERSION   = '0.71';
+   our @EXPORT    = qw( spec    );
+   our @EXPORT_OK = qw( mm_spec );
 }
 
 sub spec {
+    my %opt  = @_;
     my $file = 'SPEC';
     my $spec = do $file;
 
@@ -36,6 +37,8 @@ sub spec {
     $rv{requires}    ||= {};
     my $breq = $rv{build_requires} ||= {};
     $breq->{'Test::More'} = '0.40' if ! exists $breq->{'Test::More'};
+
+    delete $rv{BUILDER} if ! $opt{builder};
 
     return %rv;
 }

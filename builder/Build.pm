@@ -1,19 +1,13 @@
 package Build;
 use strict;
-use vars qw( $VERSION );
-use constant TAINT_SHEBANG => "#!perl -Tw\nuse constant TAINTMODE => 1;\n";
-
-# since this is a builder we don't care about warnings.pm to support older perl
-## no critic (RequireUseWarnings, InputOutput::RequireBriefOpen, InputOutput::ProhibitBacktickOperators)
-
-$VERSION = '0.70';
-
-use File::Find;
-use File::Spec;
-use File::Path;
-use Carp qw( croak );
-use Build::Spec;
+use warnings;
 use base qw( Module::Build );
+
+## no critic (InputOutput::ProhibitBacktickOperators)
+
+our $VERSION = '0.72';
+
+use constant TAINT_SHEBANG   => "#!perl -Tw\nuse constant TAINTMODE => 1;\n";
 use constant RE_VERSION_LINE => qr{
    \A (our\s+)? \$VERSION \s+ = \s+ ["'] (.+?) ['"] ; (.+?) \z
 }xms;
@@ -28,7 +22,11 @@ use constant MONTHS => qw(
 use constant MONOLITH_TEST_FAIL =>
    "\nFAILED! Building the monolithic version failed during unit testing\n\n";
 
-use constant NO_INDEX => qw( monolithic_version builder t );
+use constant NO_INDEX => qw(
+    monolithic_version
+    builder
+    t
+);
 use constant DEFAULTS => qw(
    license          perl
    create_license   1
@@ -37,14 +35,21 @@ use constant DEFAULTS => qw(
 use constant YEAR_ADD  => 1900;
 use constant YEAR_SLOT =>    5;
 
-__PACKAGE__->add_property( build_monolith      => 0  );
-__PACKAGE__->add_property( change_versions     => 0  );
-__PACKAGE__->add_property( vanilla_makefile_pl => 1  );
-__PACKAGE__->add_property( monolith_add_to_top => [] );
-__PACKAGE__->add_property( taint_mode_tests    => 0  );
+use File::Find;
+use File::Spec;
+use File::Path;
+use Carp qw( croak );
+
+use Build::Spec;
+
+__PACKAGE__->add_property( build_monolith                   => 0  );
+__PACKAGE__->add_property( change_versions                  => 0  );
+__PACKAGE__->add_property( vanilla_makefile_pl              => 1  );
+__PACKAGE__->add_property( monolith_add_to_top              => [] );
+__PACKAGE__->add_property( taint_mode_tests                 => 0  );
 __PACKAGE__->add_property( add_pod_author_copyright_license => 0 );
-__PACKAGE__->add_property( copyright_first_year => 0 );
-__PACKAGE__->add_property( initialization_hook  => q() );
+__PACKAGE__->add_property( copyright_first_year             => 0 );
+__PACKAGE__->add_property( initialization_hook              => q() );
 
 sub new {
    my $class = shift;
@@ -72,7 +77,7 @@ sub create_build_script {
 
 sub mytrim {
    my $self = shift;
-   my $s = shift;
+   my $s    = shift;
    return $s if ! $s; # false or undef
    my $extra = shift || q{};
       $s =~ s{\A \s+   }{$extra}xms;
@@ -457,12 +462,55 @@ version. This version is B<NOT SUPPORTED>.
 MONOLITH_POD_WARNING
 }
 
+sub _automatic_build_file_header {
+    my $self = shift;
+    return <<'HEAD';
+#!/usr/bin/env perl
+# This file was created automatically
+use 5.006;
+use strict;
+use warnings;
+use lib qw( builder );
+
+HEAD
+}
+
+sub _add_automatic_build_pl {
+   my $self = shift;
+   my $file = 'Build.PL';
+   return if -e $file; # do not overwrite
+   $self->_write_file(  '>', $file    =>  $self->_automatic_build_pl       );
+   $self->_write_file( '>>', MANIFEST => "$file\tGenerated automatically\n");
+   warn "ADDED AUTOMATIC $file\n";
+   return;
+}
+
+sub _automatic_build_pl {
+    my $self  = shift;
+    my %spec  = Build::Spec::spec( builder => 1 );
+    my $build = delete $spec{BUILDER} || croak 'SPEC does not have a BUILDER key';
+    my @opt;
+    foreach my $k ( keys %{ $build } ) {
+        push @opt, sprintf q{$mb->%s( %s )}, $k, $build->{ $k };
+    }
+    return $self->_automatic_build_file_header
+         . sprintf <<'BUILD_PL', join ";\n", @opt;
+use Build;
+my $mb = Build->new;
+%s;
+$mb->create_build_script;
+
+1;
+
+BUILD_PL
+}
+
 sub _add_vanilla_makefile_pl {
    my $self = shift;
    my $file = 'Makefile.PL';
    return if -e $file; # do not overwrite
-   $self->_write_file(  '>', $file, $self->_vanilla_makefile_pl );
-   $self->_write_file( '>>', 'MANIFEST', "$file\tGenerated automatically\n");
+   $self->_write_file(  '>', $file    => $self->_vanilla_makefile_pl       );
+   $self->_write_file( '>>', MANIFEST => "$file\tGenerated automatically\n");
    warn "ADDED VANILLA $file\n";
    return;
 }
@@ -482,17 +530,13 @@ HOOK
 
    $extra =~ s{<%HOOK%>}{$hook}xmsg if $extra;
 
-   my $code = <<'VANILLA_MAKEFILE_PL';
-#!/usr/bin/env perl
-use strict;
-use ExtUtils::MakeMaker;
-use lib qw( builder );
+   my $code = $self->_automatic_build_file_header;
+   $code .= <<'VANILLA_MAKEFILE_PL';
 use Build::Spec qw( mm_spec );
+use ExtUtils::MakeMaker;
 
 my %spec = mm_spec;
-
 <%EXTRA%>
-
 WriteMakefile(
     NAME         => $spec{module_name},
     VERSION_FROM => $spec{VERSION_FROM},

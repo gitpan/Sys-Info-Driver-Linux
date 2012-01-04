@@ -5,7 +5,7 @@ use vars qw( $VERSION @EXPORT %CONF );
 use base qw( Exporter );
 use Config::General ();
 
-$VERSION = '0.7801';
+$VERSION = '0.7900';
 @EXPORT  = qw( %CONF );
 
 %CONF = Config::General::ParseConfig( -String => <<'RAW' );
@@ -22,7 +22,7 @@ $VERSION = '0.7801';
 <centos>
     manufacturer  = Lance Davis
     release       = redhat-release
-    version_match = CentOS release (.*) \(
+    version_match = CentOS(?: Linux)? release (.*) \(
 </centos>
 
 <conectiva>
@@ -46,25 +46,28 @@ $VERSION = '0.7801';
            4.0  = etch
            5.0  = lenny
            6.0  = squeeze
+           7.0  = wheezy
     </edition>
     # we get the version as "lenny/sid" for example
     <vfix>
-        buzz   = 1.1
-        rex    = 1.2
-        bo     = 1.3
-        hamm   = 2.0
-        slink  = 2.1
-        potato = 2.2
-        woody  = 3.0
-        sarge  = 3.1
-        etch   = 4.0
-        lenny  = 5.0
+        buzz    = 1.1
+        rex     = 1.2
+        bo      = 1.3
+        hamm    = 2.0
+        slink   = 2.1
+        potato  = 2.2
+        woody   = 3.0
+        sarge   = 3.1
+        etch    = 4.0
+        lenny   = 5.0
+        squeeze = 6.0
+        wheezy  = 7.0
     </vfix>
 </debian>
 
 <fedora>
-    manufacturer  = Fedora Project
-    version_match = Fedora (?:Core )?release (\d+) \(
+    manufacturer    = Fedora Project
+    version_match   = Fedora (?:Core )?release (\d+) \(
     release_derived = fedora-release
     <edition>
            1    = Yarrow
@@ -80,13 +83,17 @@ $VERSION = '0.7801';
           11    = Leonidas
           12    = Constantine
           13    = Goddard
+          14    = Laughlin
+          15    = Lovelock
+          16    = Verne
+          17    = Beefy Miracle
     </edition>
 </fedora>
 
 <gentoo>
     manufacturer  = Gentoo Foundation
     version_match = Gentoo Base System version (.*)
-    release = gentoo-release
+    release       = gentoo-release
 </gentoo>
 
 <immunix>
@@ -135,6 +142,9 @@ $VERSION = '0.7801';
         2009.0  = 2009
         2009.1  = 2009 Spring
         2010.0  = 2010
+        2010.1  = 2010 Spring
+        2010.2  = 2010.2
+        2011.0  = Hydrogen
     </edition>
 </mandriva>
 
@@ -194,7 +204,11 @@ $VERSION = '0.7801';
            8.10 = Intrepid Ibex
            9.04 = Jaunty Jackalope
            9.10 = Karmic Koala
-	  10.04 = Lucid Lynx
+          10.04 = Lucid Lynx
+          10.10 = Maverick Meerkat
+          11.04 = Natty Narwhal
+          11.10 = Oneiric Ocelot
+          12.04 = Precise Pangolin
     </edition>
 </ubuntu>
 
@@ -226,8 +240,8 @@ Sys::Info::Driver::Linux::OS::Distribution::Conf - Distro configuration
 
 =head1 DESCRIPTION
 
-This document describes version C<0.7801> of C<Sys::Info::Driver::Linux::OS::Distribution::Conf>
-released on C<31 July 2011>.
+This document describes version C<0.7900> of C<Sys::Info::Driver::Linux::OS::Distribution::Conf>
+released on C<5 January 2012>.
 
 =head1 AUTHOR
 
@@ -235,12 +249,12 @@ Burak Gursoy <burak@cpan.org>.
 
 =head1 COPYRIGHT
 
-Copyright 2006 - 2011 Burak Gursoy. All rights reserved.
+Copyright 2006 - 2012 Burak Gursoy. All rights reserved.
 
 =head1 LICENSE
 
 This library is free software; you can redistribute it and/or modify 
-it under the same terms as Perl itself, either Perl version 5.10.1 or, 
+it under the same terms as Perl itself, either Perl version 5.12.4 or, 
 at your option, any later version of Perl 5 you may have available.
 
 =cut

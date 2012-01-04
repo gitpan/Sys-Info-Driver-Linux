@@ -1,12 +1,14 @@
 #!/usr/bin/env perl
+# This file was created automatically
+use 5.006;
 use strict;
-use ExtUtils::MakeMaker;
+use warnings;
 use lib qw( builder );
+
 use Build::Spec qw( mm_spec );
+use ExtUtils::MakeMaker;
 
 my %spec = mm_spec;
-
-
 
 WriteMakefile(
     NAME         => $spec{module_name},

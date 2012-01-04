@@ -12,7 +12,7 @@ use constant FSTAB_LENGTH => 6;
 
 ##no critic (InputOutput::ProhibitBacktickOperators)
 
-$VERSION = '0.7801';
+$VERSION = '0.7900';
 
 sub init {
     my $self = shift;
@@ -201,13 +201,14 @@ sub _populate_osversion {
     my $self = shift;
     return $self if $self->{OSVERSION};
     require Sys::Info::Driver::Linux::OS::Distribution;
-    my $distro     = Sys::Info::Driver::Linux::OS::Distribution->new;
-    my $osname     = $distro->name;
-    my $V          = $distro->version;
-    my $edition    = $distro->edition;
-    my $kernel     = $distro->kernel;
-    my $build      = $distro->build;
-    my $build_date = $distro->build_date;
+    my $distro       = Sys::Info::Driver::Linux::OS::Distribution->new;
+    my $osname       = $distro->name;
+    my $V            = $distro->version;
+    my $edition      = $distro->edition;
+    my $kernel       = $distro->kernel;
+    my $build        = $distro->build;
+    my $build_date   = $distro->build_date;
+    my $manufacturer = $distro->manufacturer || q{};
 
     $self->{OSVERSION} = {
         NAME             => $osname,
@@ -216,7 +217,7 @@ sub _populate_osversion {
         LONGNAME_EDITION => q{}, # will be set below
         VERSION          => $V,
         KERNEL           => $kernel,
-        MANUFACTURER     => $distro->manufacturer,
+        MANUFACTURER     => $manufacturer,
         RAW              => {
             BUILD      => defined $build      ? $build      : 0,
             BUILD_DATE => defined $build_date ? $build_date : 0,
@@ -286,8 +287,8 @@ Sys::Info::Driver::Linux::OS - Linux backend
 
 =head1 DESCRIPTION
 
-This document describes version C<0.7801> of C<Sys::Info::Driver::Linux::OS>
-released on C<31 July 2011>.
+This document describes version C<0.7900> of C<Sys::Info::Driver::Linux::OS>
+released on C<5 January 2012>.
 
 -
 
@@ -339,12 +340,12 @@ Burak Gursoy <burak@cpan.org>.
 
 =head1 COPYRIGHT
 
-Copyright 2006 - 2011 Burak Gursoy. All rights reserved.
+Copyright 2006 - 2012 Burak Gursoy. All rights reserved.
 
 =head1 LICENSE
 
 This library is free software; you can redistribute it and/or modify 
-it under the same terms as Perl itself, either Perl version 5.10.1 or, 
+it under the same terms as Perl itself, either Perl version 5.12.4 or, 
 at your option, any later version of Perl 5 you may have available.
 
 =cut
