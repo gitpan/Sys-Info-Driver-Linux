@@ -7,11 +7,8 @@ use constant DEFAULT_AUTHOR => 'Burak Gursoy <burak@cpan.org>';
 use constant OS_ERROR       => qr{OS \s+ unsupported}xms;
 use base qw( Exporter );
 
-# since this is a builder we don't care about warnings.pm to support older perl
-## no critic (RequireUseWarnings)
-
 BEGIN {
-   our $VERSION   = '0.71';
+   our $VERSION   = '0.80';
    our @EXPORT    = qw( spec    );
    our @EXPORT_OK = qw( mm_spec );
 }

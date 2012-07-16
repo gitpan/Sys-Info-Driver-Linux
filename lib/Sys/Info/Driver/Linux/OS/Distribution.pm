@@ -2,6 +2,7 @@ package Sys::Info::Driver::Linux::OS::Distribution;
 use strict;
 use warnings;
 use constant STD_RELEASE => 'lsb-release';
+use constant STD_RELEASE_DIR => 'lsb-release.d';
 use base qw( Sys::Info::Base );
 use Carp qw( croak );
 use Sys::Info::Driver::Linux;
@@ -9,14 +10,14 @@ use Sys::Info::Driver::Linux::Constants qw( :all );
 use Sys::Info::Driver::Linux::OS::Distribution::Conf;
 use File::Spec;
 
-our $VERSION = '0.7900';
+our $VERSION = '0.7901';
 
 # XXX: <REMOVE>
 my $RELX = sub {
     my $master = shift;
     my $t = sub {
         my($k, $v) = @_;
-	return map { $_ => $v} ref $k ? @{$k} : ($k);
+    return map { $_ => $v} ref $k ? @{$k} : ($k);
     };
     map  { $t->($CONF{$_}->{$master}, $_ ) }
     grep {      $CONF{$_}->{$master}       }
@@ -31,13 +32,14 @@ sub new {
     my $class = shift;
     my $self  = {
         DISTRIB_ID          => q{},
+        DISTRIB_NAME        => q{}, # workround field for new distros
         DISTRIB_RELEASE     => q{},
         DISTRIB_CODENAME    => q{},
         DISTRIB_DESCRIPTION => q{},
         release_file        => q{},
         pattern             => q{},
-	PROBE               => undef,
-	RESULTS             => undef,
+        PROBE               => undef,
+        RESULTS             => undef,
     };
     bless $self, $class;
     $self->_initial_probe;
@@ -71,7 +73,7 @@ sub _probe {
 }
 
 sub _probe_name {
-    my $self = shift;
+    my $self   = shift;
     my $distro = $self->_get_lsb_info;
     return $distro if $distro;
     return $self->_probe_release( \%DERIVED_RELEASE  )
@@ -79,11 +81,9 @@ sub _probe_name {
 }
 
 sub _probe_release {
-    my($self, $r) = @_;
+    my($self, $r) = @_;;
     foreach my $id ( keys %{ $r } ) {
-	# we can't use "-l _" here. it'll die on some systems
-	# XXX: check if -l check is really necessary
-        if ( -f "/etc/$id" && !-l "/etc/$id" ){
+        if ( -f "/etc/$id" && ! -l "/etc/$id" ) {
             $self->{DISTRIB_ID}   = $r->{ $id };
             $self->{release_file} = $id;
             return $self->{DISTRIB_ID};
@@ -93,12 +93,14 @@ sub _probe_release {
 }
 
 sub _probe_version {
-    my $self = shift;
+    my $self    = shift;
     my $release = $self->_get_lsb_info('DISTRIB_RELEASE');
     return $release if $release;
-    if ( ! $self->{DISTRIB_ID} ){
-        croak 'No version because no distribution' if ! $self->name;
+
+    if ( ! $self->{DISTRIB_ID} && ! $self->name ) {
+        croak 'No version because no distribution';
     }
+
     my $slot         = $CONF{ lc $self->{DISTRIB_ID} };
     $self->{pattern} = exists $slot->{version_match} ? $slot->{version_match} : q{};
     $release         = $self->_get_file_info;
@@ -111,14 +113,17 @@ sub _probe_edition {
     my $p    = $self->{PROBE};
 
     if ( my $dn = $self->name ) {
-	my $slot = $CONF{ $dn };
-        $dn  = exists $slot->{name} ? $slot->{name} : ucfirst $dn;
-        $dn .= ' Linux';
-	$self->{RESULTS}{name}    = $dn;
+        my $n = $self->{DISTRIB_NAME} || do {
+            my $slot = $CONF{ $dn };
+            exists $slot->{name} ? $slot->{name} : ucfirst $dn;
+        };
+        $dn  = $self->trim( $n );
+        $dn .= ' Linux' if $dn !~ m{Linux}xmsi;
+        $self->{RESULTS}{name} = $dn;
     }
     else {
-	$self->{RESULTS}{name}    = $p->{distro};
-	$self->{RESULTS}{version} = $p->{kernel};
+        $self->{RESULTS}{name}    = $p->{distro};
+        $self->{RESULTS}{version} = $p->{kernel};
     }
 
     my $name     = $self->name;
@@ -127,13 +132,23 @@ sub _probe_edition {
     my $slot     = $CONF{$raw_name} || return;
     my $edition  = exists $slot->{edition} ? $slot->{edition}{ $version } : undef;
 
-    if ( ! $edition && $version && $version !~ m{[0-9]}xms ) {
-        if ( $name =~ /debian/xmsi ) {
-            my @buf = split m{/}xms, $version;
-            if ( my $test = $CONF{debian}->{vfix}{ lc $buf[0] } ) {
-                # Debian version comes as the edition name
-                $edition = $version;
-                $self->{RESULTS}{version} = $test;
+    if ( ! $edition ) {
+        if ( $version && $version !~ m{[0-9]}xms ) {
+            if ( $name =~ m{debian}xmsi ) {
+                my @buf = split m{/}xms, $version;
+                if ( my $test = $CONF{debian}->{vfix}{ lc $buf[0] } ) {
+                    # Debian version comes as the edition name
+                    $edition = $version;
+                    $self->{RESULTS}{version} = $test;
+                }
+            }
+        }
+        else {
+            if (   $slot->{use_codename_for_edition}
+                && $self->{DISTRIB_CODENAME}
+            ) {
+                my $cn = $self->{DISTRIB_CODENAME};
+                $edition = $cn if $cn !~ m{[0-9]}xms;
             }
         }
     }
@@ -177,11 +192,11 @@ sub _initial_probe {
     my $build   = $build_date ? localtime $build_date : q{};
 
     $self->{PROBE} = {
-	version    => $version,
-	kernel     => $kernel,
-	build      => $build,
-	build_date => $build_date,
-	distro     => $distro,
+        version    => $version,
+        kernel     => $kernel,
+        build      => $build,
+        build_date => $build_date,
+        distro     => $distro,
     };
 
     $self->_probe;
@@ -198,6 +213,39 @@ sub _get_lsb_info {
         $self->{pattern}      = $field . '=(.+)';
         my $info = $self->_get_file_info;
         return $self->{$field} = $info if $info;
+    }
+    else {
+        # CentOS6+? RHEL? Any new distro?
+        my $dir = File::Spec->catdir( '/etc', STD_RELEASE_DIR );
+        if ( -d $dir ) {
+            my $rv = map  { s{$dir/}{}xms && $_ }
+                 grep { $_ !~ m{ \A [.] }xms }
+                 glob "$dir/*";
+            $self->{LSB_VERSION} = $rv if $rv;
+        }
+        my($release) = do {
+            my @files = glob "/etc/*release";
+            my($real) = sort grep { ! -l } @files;
+            my %uniq  = map { $self->trim( $self->slurp( $_ ) ) => 1 }
+                        @files;
+            if ( $real ) {
+                ($self->{release_file} = $real) =~ s{/etc/}{}xms;
+                $self->{pattern}       = '(.+)';
+            }
+            keys %uniq;
+        };
+        return if ! $release; # huh?
+        my($rname) = split m{\-}xms, $self->{release_file};
+        my($distrib_id, @rest)  = split m{release}xms, $release, 2;
+        my($version, $codename) = split m{ \s+   }xms, $self->trim( join ' ', @rest ), 2;
+        $codename   =~ s{[()]}{}xmsg;
+        $distrib_id = $self->trim( $distrib_id );
+        $self->{DISTRIB_DESCRIPTION} = $release;
+        $self->{DISTRIB_ID}          = $rname || $distrib_id;
+        $self->{DISTRIB_NAME}        = $distrib_id;
+        $self->{DISTRIB_RELEASE}     = $version;
+        $self->{DISTRIB_CODENAME}    = $codename;
+        return $self->{ $field } if $self->{ $field };
     }
 
     $self->{release_file} = $tmp;
@@ -216,12 +264,12 @@ sub _get_file_info {
     my $rv;
     foreach my $line ( @raw ){
         chomp $line;
-	## no critic (RequireExtendedFormatting)
+        ## no critic (RequireExtendedFormatting)
         my($info) = $line =~ m/$self->{pattern}/ms;
         if ( $info ) {
-	    $rv = "\L$info";
-	    last;
-	}
+            $rv = "\L$info";
+            last;
+        }
     }
     return $rv;
 }
@@ -250,8 +298,8 @@ Sys::Info::Driver::Linux::OS::Distribution - Linux distribution probe
 
 =head1 DESCRIPTION
 
-This document describes version C<0.7900> of C<Sys::Info::Driver::Linux::OS::Distribution>
-released on C<5 January 2012>.
+This document describes version C<0.7901> of C<Sys::Info::Driver::Linux::OS::Distribution>
+released on C<16 July 2012>.
 
 This is a simple module that tries to guess on what linux distribution
 we are running by looking for release's files in /etc.  It now looks for
@@ -310,8 +358,7 @@ Copyright 2006 - 2012 Burak Gursoy. All rights reserved.
 
 =head1 LICENSE
 
-This library is free software; you can redistribute it and/or modify 
-it under the same terms as Perl itself, either Perl version 5.12.4 or, 
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.14.2 or,
 at your option, any later version of Perl 5 you may have available.
-
 =cut

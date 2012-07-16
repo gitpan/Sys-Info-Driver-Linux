@@ -8,7 +8,7 @@ use Unix::Processors;
 use POSIX ();
 use Carp qw( croak );
 
-$VERSION = '0.7900';
+$VERSION = '0.7901';
 
 sub identify {
     my $self = shift;
@@ -99,8 +99,8 @@ Sys::Info::Driver::Linux::Device::CPU - Linux CPU Device Driver
 
 =head1 DESCRIPTION
 
-This document describes version C<0.7900> of C<Sys::Info::Driver::Linux::Device::CPU>
-released on C<5 January 2012>.
+This document describes version C<0.7901> of C<Sys::Info::Driver::Linux::Device::CPU>
+released on C<16 July 2012>.
 
 Identifies the CPU with L<Unix::Processors>, L<POSIX> and C<< /proc >>.
 
@@ -135,8 +135,7 @@ Copyright 2006 - 2012 Burak Gursoy. All rights reserved.
 
 =head1 LICENSE
 
-This library is free software; you can redistribute it and/or modify 
-it under the same terms as Perl itself, either Perl version 5.12.4 or, 
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.14.2 or,
 at your option, any later version of Perl 5 you may have available.
-
 =cut
