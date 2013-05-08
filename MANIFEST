@@ -16,7 +16,9 @@ lib/Sys/Info/Driver/Linux/Constants.pm
 lib/Sys/Info/Driver/Linux/Device.pm
 lib/Sys/Info/Driver/Linux/Device/CPU.pm
 lib/Sys/Info/Driver/Linux/OS.pm
+lib/Sys/Info/Driver/Linux/OS.pm.orig
 lib/Sys/Info/Driver/Linux/OS/Distribution.pm
+lib/Sys/Info/Driver/Linux/OS/Distribution.pm.orig
 lib/Sys/Info/Driver/Linux/OS/Distribution/Conf.pm
 LICENSE
 Makefile.PL			Generated automatically

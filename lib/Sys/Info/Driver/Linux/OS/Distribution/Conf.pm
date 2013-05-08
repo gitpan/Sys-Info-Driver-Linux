@@ -5,7 +5,7 @@ use vars qw( $VERSION @EXPORT %CONF );
 use base qw( Exporter );
 use Config::General ();
 
-$VERSION = '0.7901';
+$VERSION = '0.7903';
 @EXPORT  = qw( %CONF );
 
 %CONF = Config::General::ParseConfig( -String => <<'RAW' );
@@ -211,6 +211,8 @@ $VERSION = '0.7901';
           11.04 = Natty Narwhal
           11.10 = Oneiric Ocelot
           12.04 = Precise Pangolin
+          12.10	= Quantal Quetzal
+          13.04	= Raring Ringtail
     </edition>
 </ubuntu>
 
@@ -242,8 +244,8 @@ Sys::Info::Driver::Linux::OS::Distribution::Conf - Distro configuration
 
 =head1 DESCRIPTION
 
-This document describes version C<0.7901> of C<Sys::Info::Driver::Linux::OS::Distribution::Conf>
-released on C<16 July 2012>.
+This document describes version C<0.7903> of C<Sys::Info::Driver::Linux::OS::Distribution::Conf>
+released on C<8 May 2013>.
 
 =head1 AUTHOR
 
@@ -251,7 +253,7 @@ Burak Gursoy <burak@cpan.org>.
 
 =head1 COPYRIGHT
 
-Copyright 2006 - 2012 Burak Gursoy. All rights reserved.
+Copyright 2006 - 2013 Burak Gursoy. All rights reserved.
 
 =head1 LICENSE
 

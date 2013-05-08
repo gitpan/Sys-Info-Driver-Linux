@@ -3,7 +3,6 @@ use strict;
 use warnings;
 use constant STD_RELEASE     => 'lsb-release';
 use constant STD_RELEASE_DIR => 'lsb-release.d';
-use constant DEBIAN_RELEASE  => 'os-release';
 use constant STD_ETC_DIR     => '/etc';
 
 use base qw( Sys::Info::Base );
@@ -13,7 +12,7 @@ use Sys::Info::Driver::Linux::Constants qw( :all );
 use Sys::Info::Driver::Linux::OS::Distribution::Conf;
 use File::Spec;
 
-our $VERSION = '0.7903';
+our $VERSION = '0.73';
 
 # XXX: <REMOVE>
 my $RELX = sub {
@@ -79,10 +78,16 @@ sub _probe {
     return $self->{RESULTS} if $self->{RESULTS};
     $self->{RESULTS}           = {};
     $self->{RESULTS}{name}     = $self->_probe_name;
+
+use Data::Dumper;
+
     $self->{RESULTS}{raw_name} = $self->{RESULTS}{name};
     $self->{RESULTS}{version}  = $self->_probe_version;
     # this has to be last, since this also modifies the two above
     $self->{RESULTS}{edition}  = $self->_probe_edition;
+
+die Dumper [ $self->{RESULTS}];
+
     return $self->{RESULTS};
 }
 
@@ -112,6 +117,7 @@ sub _probe_release {
 sub _probe_version {
     my $self    = shift;
     my $release = $self->_get_lsb_info('DISTRIB_RELEASE');
+die $release if $release;
     return $release if $release;
 
     if ( ! $self->{DISTRIB_ID} && ! $self->name ) {
@@ -137,12 +143,13 @@ sub _probe_edition {
         $dn  = $self->trim( $n );
         $dn .= ' Linux' if $dn !~ m{Linux}xmsi;
         $self->{RESULTS}{name} = $dn;
+die ">>> $dn <<< "
     }
     else {
         $self->{RESULTS}{name}    = $p->{distro};
         $self->{RESULTS}{version} = $p->{kernel};
     }
-
+die Dumper [ $self->{RESULTS} ];
     my $name     = $self->name;
     my $raw_name = $self->raw_name;
     my $version  = $self->version;
@@ -225,16 +232,8 @@ sub _get_lsb_info {
     my $field = shift || 'DISTRIB_ID';
     my $tmp   = $self->{release_file};
 
-    my($rfile) = grep { -r $_->[1] }
-                map  {
-                    [ $_ => File::Spec->catfile( $self->{etc_dir}, $_ ) ]
-                }
-                STD_RELEASE,
-                DEBIAN_RELEASE
-                ;
-
-    if ( $rfile ) {
-        $self->{release_file} = $rfile->[0];
+    if ( -r File::Spec->catfile( $self->{etc_dir}, STD_RELEASE ) ) {
+        $self->{release_file} = STD_RELEASE;
         $self->{pattern}      = $field . '=(.+)';
         my $info = $self->_get_file_info;
         return $self->{$field} = $info if $info;
@@ -267,6 +266,8 @@ sub _get_lsb_info {
 
         my($rname) = split m{\-}xms, $self->{release_file};
         my($distrib_id, @rest)  = split m{release}xms, $release, 2;
+
+die Dumper [ $rname, $distrib_id, \@rest ];
         my($version, $codename) = split m{ \s+   }xms, $self->trim( join ' ', @rest ), 2;
         $codename   =~ s{[()]}{}xmsg if $codename;
         $distrib_id = $self->trim( $distrib_id );
@@ -298,7 +299,7 @@ sub _get_file_info {
     my $file = File::Spec->catfile( $self->{etc_dir}, $self->{release_file} );
     require IO::File;
     my $FH = IO::File->new;
-    $FH->open( $file, '<' ) || croak "Can't open $file: $!";
+    $FH->open( $file, '<' ) || croak "Cannot open $file: $!";
     my @raw = <$FH>;
     $FH->close || croak "Can't close FH($file): $!";
     my $rv;
@@ -337,9 +338,6 @@ Sys::Info::Driver::Linux::OS::Distribution - Linux distribution probe
     }
 
 =head1 DESCRIPTION
-
-This document describes version C<0.7903> of C<Sys::Info::Driver::Linux::OS::Distribution>
-released on C<8 May 2013>.
 
 This is a simple module that tries to guess on what linux distribution
 we are running by looking for release's files in /etc.  It now looks for
@@ -388,17 +386,4 @@ and it's authors are:
     Judith Lebzelter E<lt>judith@osdl.orgE<gt>
     Alexandr Ciornii E<lt>alexchorny@gmail.com<gt>
 
-=head1 AUTHOR
-
-Burak Gursoy <burak@cpan.org>.
-
-=head1 COPYRIGHT
-
-Copyright 2006 - 2013 Burak Gursoy. All rights reserved.
-
-=head1 LICENSE
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.14.2 or,
-at your option, any later version of Perl 5 you may have available.
 =cut

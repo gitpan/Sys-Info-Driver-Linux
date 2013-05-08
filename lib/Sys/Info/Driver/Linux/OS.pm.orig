@@ -12,7 +12,7 @@ use constant FSTAB_LENGTH => 6;
 
 ##no critic (InputOutput::ProhibitBacktickOperators)
 
-$VERSION = '0.7903';
+$VERSION = '0.70';
 
 sub init {
     my $self = shift;
@@ -229,6 +229,9 @@ sub _populate_osversion {
 
     my $o = $self->{OSVERSION};
     my $t = '%s %s (kernel: %s)';
+
+use Data::Dumper;
+print Dumper [ $t, $o->{NAME},         $o->{VERSION}, $kernel ];
     $o->{LONGNAME}         = sprintf $t, $o->{NAME},         $o->{VERSION}, $kernel;
     $o->{LONGNAME_EDITION} = sprintf $t, $o->{NAME_EDITION}, $o->{VERSION}, $kernel;
     return $self;
@@ -289,9 +292,6 @@ Sys::Info::Driver::Linux::OS - Linux backend
 
 =head1 DESCRIPTION
 
-This document describes version C<0.7903> of C<Sys::Info::Driver::Linux::OS>
-released on C<8 May 2013>.
-
 -
 
 =head1 METHODS
@@ -336,17 +336,4 @@ L<Sys::Info>, L<Sys::Info::OS>,
 The C</proc> virtual filesystem:
 L<http://www.redhat.com/docs/manuals/linux/RHL-9-Manual/ref-guide/s1-proc-topfiles.html>.
 
-=head1 AUTHOR
-
-Burak Gursoy <burak@cpan.org>.
-
-=head1 COPYRIGHT
-
-Copyright 2006 - 2013 Burak Gursoy. All rights reserved.
-
-=head1 LICENSE
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.14.2 or,
-at your option, any later version of Perl 5 you may have available.
 =cut
